@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 20 360 230" role="img" aria-label="Cargando">
+<defs>
+<path id="l" d="M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212;M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212;M70 205C105 175 160 130 192 108C155 120 96 116 92 86C88 56 140 60 189 91C197 89 203 89 211 91C260 60 312 56 308 86C304 116 245 120 208 108C240 130 295 175 330 205;M46 186C90 170 150 128 192 108C175 114 148 112 148 100C148 88 168 86 189 91C197 89 203 89 211 91C232 86 252 88 252 100C252 112 225 114 208 108C250 128 310 170 354 186;M72 206C22 150 192 182 193 106C194 103 193 101 193 99C193 97 192 95 196 94C204 92 196 92 204 94C208 95 207 97 207 99C207 101 206 103 207 106C208 182 378 150 328 206;M88 212C44 148 192 176 193 106C194 103 193 101 193 99C193 97 192 95 196 94C204 92 196 92 204 94C208 95 207 97 207 99C207 101 206 103 207 106C208 176 356 148 312 212;M70 205C105 175 160 130 192 108C155 120 96 116 92 86C88 56 140 60 189 91C197 89 203 89 211 91C260 60 312 56 308 86C304 116 245 120 208 108C240 130 295 175 330 205;M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212"/></path>
+<path id="a" d="M93.2 210.4L77.5 231.1"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M93.2 210.4L77.5 231.1;M93.2 210.4L77.5 231.1;M71.5 203.7L51.8 220.6;M47.9 185.3L23.4 194.2;M70.7 204.5L88 223.9;M86.9 210.4L101.6 231.8;M71.5 203.7L51.8 220.6;M93.2 210.4L77.5 231.1"/></path>
+<path id="b" d="M306.8 210.4L322.5 231.1"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M306.8 210.4L322.5 231.1;M306.8 210.4L322.5 231.1;M328.5 203.7L348.2 220.6;M352.1 185.3L376.6 194.2;M329.3 204.5L312 223.9;M313.1 210.4L298.4 231.8;M328.5 203.7L348.2 220.6;M306.8 210.4L322.5 231.1"/></path>
+<g id="w"><rect x="-10" y="-25" width="20" height="50" rx="9"/></g>
+</defs>
+<g fill="none" stroke-linejoin="round">
+<use href="#l" stroke="#2b2622" stroke-width="31"/>
+<use href="#l" stroke="#efdcae" stroke-width="27"/>
+<use href="#l" stroke="#e7e3dd" stroke-width="21"/>
+<use href="#l" stroke="#a8a096" stroke-width="17" stroke-dasharray="1.3 3.7" opacity=".4"/>
+<g stroke-linecap="round">
+<use href="#a" stroke="#2b2622" stroke-width="21"/><use href="#b" stroke="#2b2622" stroke-width="21"/>
+<use href="#a" stroke="#cfcac3" stroke-width="16"/><use href="#b" stroke="#cfcac3" stroke-width="16"/>
+<use href="#a" stroke="#f4f2ee" stroke-width="4" opacity=".8"/><use href="#b" stroke="#f4f2ee" stroke-width="4" opacity=".8"/>
+</g>
+</g>
+<g transform="translate(200 99)">
+<g><animate attributeName="opacity" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="1;1;1;.2;0;0;1;1"/>
+<animateTransform attributeName="transform" type="scale" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="1;1;.92;.55;.3;.3;.92;1"/>
+<g stroke="#2b2622" stroke-width="2.5">
+<use href="#w" x="-10" fill="#efdcae"/><use href="#w" x="10" fill="#e7e3dd"/>
+</g>
+<g fill="none" stroke="#a8a096" stroke-width="15" stroke-dasharray="1.3 3.7" opacity=".4">
+<path d="M-10-14v28M10-14v28"/>
+</g>
+</g>
+</g>
+</svg>
