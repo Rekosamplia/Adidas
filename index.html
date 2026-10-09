@@ -273,11 +273,18 @@
     { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 120 € en franquicias' }
   ];
   var PROB_DOBLE = 0.3;             // probabilidad de que una caja incluya doble premio
-  var asignados = {};               // cada caja mantiene su premio durante la visita
-  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
-  function premioPara(n) {
-    if (!asignados[n]) asignados[n] = { main: pick(PREMIOS_INMEDIATOS), extra: Math.random() < PROB_DOBLE ? pick(PREMIOS_COMPRA) : null };
-    return asignados[n];
+  // Cada clic sortea de nuevo, sin repetir el regalo mostrado justo antes
+  var ultimo = { main: null, extra: null };
+  function pickDistinto(list, prev) {
+    var opciones = list.filter(function (x) { return x !== prev; });
+    return opciones[Math.floor(Math.random() * opciones.length)];
+  }
+  function premioPara() {
+    var main = pickDistinto(PREMIOS_INMEDIATOS, ultimo.main);
+    var extra = Math.random() < PROB_DOBLE ? pickDistinto(PREMIOS_COMPRA, ultimo.extra) : null;
+    ultimo.main = main;
+    if (extra) ultimo.extra = extra;
+    return { main: main, extra: extra };
   }
 
   // ── Build lid stripes + bulbs once (inside the shared symbols) ──

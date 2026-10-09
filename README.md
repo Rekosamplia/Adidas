@@ -31,7 +31,7 @@ En el `<script>` de `index.html`:
 | `PREMIOS_COMPRA` | lista | Doble premio condicionado a compra mínima (aleatorio) |
 | `PROB_DOBLE` | `0.3` | Probabilidad de que una caja incluya doble premio (30 %) |
 
-Cada caja conserva el premio asignado mientras el usuario no recargue la página.
+Cada clic en una caja sortea un regalo nuevo, distinto del mostrado justo antes.
 
 ## Publicar en GitHub Pages
 
