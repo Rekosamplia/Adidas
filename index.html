@@ -77,12 +77,12 @@
 
   /* ── Modal / Vale ── */
   dialog {
-    width: min(720px, calc(100% - 32px)); max-width: none; padding: 0; border: 0; background: transparent; color: #111;
+    width: min(720px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); overflow: auto; padding: 0; border: 0; background: transparent; color: #111;
   }
   dialog::backdrop { background: rgba(8, 8, 9, .85); backdrop-filter: blur(4px); }
   dialog[open] .voucher { animation: pop .5s cubic-bezier(.2, 1.3, .4, 1); }
   @keyframes pop { from { transform: scale(.85) translateY(20px); opacity: 0; } }
-  .voucher { position: relative; display: grid; grid-template-columns: 150px 1fr; border-radius: 16px; overflow: hidden; background: #f4f2ee; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
+  .voucher { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr); border-radius: 16px; overflow: hidden; background: #f4f2ee; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
   .stub { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 16px; background: #000; color: #fff; }
   .stub svg { width: 64px; height: auto; }
   .stub .tag { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #bbb; }
@@ -93,11 +93,20 @@
   }
   .body { position: relative; padding: 36px 36px 32px; background:
       repeating-linear-gradient(-60deg, transparent 0 28px, rgba(0,0,0,.035) 28px 46px) right / 40% 100% no-repeat, #f4f2ee; }
-  .body .eyebrow { margin: 0 0 14px; color: #6d6a64; }
-  .body h2 { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.02; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
-  .body p { margin: 18px 0 0; color: #4c4944; font-size: 15px; line-height: 1.5; }
-  .stripes { display: flex; gap: 6px; margin-top: 26px; }
-  .stripes i { display: block; width: 10px; height: 34px; background: #000; transform: skewX(-20deg); }
+  .body .eyebrow { margin: 0 0 14px; color: #6d6a64; letter-spacing: .12em; }
+  .body h2 { margin: 0; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.02; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; padding-right: 28px; }
+  .prizes { display: grid; gap: 10px; margin-top: 22px; }
+  .prize { display: grid; gap: 4px; padding: 14px 16px; border-radius: 10px; background: #fff; border: 1px solid #e2ded6; }
+  .prize .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #6d6a64; }
+  .prize strong { font-size: 20px; font-weight: 800; line-height: 1.15; }
+  .prize small { font-size: 14px; color: #4c4944; }
+  .prize[hidden] { display: none; }
+  .prize.extra { background: #000; border-color: #000; color: #fff; }
+  .prize.extra .label { color: var(--warm); }
+  .prize.extra small { color: #c9c5be; }
+  .redeem { display: flex; align-items: center; gap: 18px; margin: 20px 0 0; padding-top: 18px; border-top: 1px dashed #cfcac2; color: #2a2825; font-size: 16px; line-height: 1.4; }
+  .redeem img { flex: none; width: 120px; height: auto; display: block; }
+  @media (max-width: 560px) { .redeem img { width: 104px; } .redeem { font-size: 15px; gap: 14px; } }
   .close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.08); color: #111; font-size: 20px; line-height: 1; cursor: pointer; }
   .close:hover, .close:focus-visible { background: #000; color: #fff; outline: none; }
   .notch { position: absolute; left: 150px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); translate: -50% 0; z-index: 1; }
@@ -109,8 +118,11 @@
     header { padding-top: 32px; }
     .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .card { padding: 14px 10px 10px; }
-    .voucher { grid-template-columns: 1fr; }
-    .stub { flex-direction: row; padding: 18px 20px; }
+    .voucher { grid-template-columns: minmax(0, 1fr); }
+    .stub { flex-direction: row; padding: 18px 64px 18px 20px; }
+    .stub svg { width: 52px; }
+    .stub .circle { width: 52px; height: 52px; font-size: 22px; }
+    .close { background: rgba(255,255,255,.15); color: #fff; }
     .stub .tag { writing-mode: horizontal-tb; transform: none; }
     .stub::after { top: auto; bottom: -1px; left: 12px; right: 12px; width: auto; height: 2px; background: repeating-linear-gradient(90deg, #f4f2ee 0 6px, transparent 6px 12px); }
     .notch { display: none; }
@@ -221,8 +233,21 @@
     <div class="body">
       <p class="eyebrow">Vale regalo · Caja nº <span id="v-num2">16</span></p>
       <h2 id="v-title">Acércate a la tienda de Adidas a por tu regalo</h2>
-      <p>Muestra este vale en tu tienda adidas más cercana.</p>
-      <div class="stripes" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="prizes">
+        <div class="prize">
+          <span class="label">Tu regalo</span>
+          <strong id="p-main"></strong>
+        </div>
+        <div class="prize extra" id="p-extra" hidden>
+          <span class="label">¡Doble premio! · Con tu compra</span>
+          <strong id="p-extra-name"></strong>
+          <small id="p-extra-cond"></small>
+        </div>
+      </div>
+      <p class="redeem">
+        <img src="assets/qr-app.svg" alt="Código QR de la app" width="120" height="114" decoding="async">
+        <span>Recoge y canjea tu regalo en tienda mostrando el <b>QR de la app</b>.</span>
+      </p>
     </div>
     <form method="dialog"><button class="close" aria-label="Cerrar">×</button></form>
   </div>
@@ -233,6 +258,27 @@
   // ── Config ──
   var FIRST = 16, COUNT = 33;       // números 16 → 48
   var LOADER_MS = 1900;             // tiempo para que el lazo se deshaga
+
+  // ── Premios ──
+  var PREMIOS_INMEDIATOS = [
+    'Stickers de la marca',
+    'Lanyard de la marca',
+    'Bruma de la marca',
+    'Gel de la marca'
+  ];
+  var PREMIOS_COMPRA = [            // doble premio, condicionado a compra mínima
+    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 110 € en outlets' },
+    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 150 € en franquicias' },
+    { premio: 'Fragancia',       condicion: 'Por compras superiores a 70 € en outlets' },
+    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 120 € en franquicias' }
+  ];
+  var PROB_DOBLE = 0.3;             // probabilidad de que una caja incluya doble premio
+  var asignados = {};               // cada caja mantiene su premio durante la visita
+  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+  function premioPara(n) {
+    if (!asignados[n]) asignados[n] = { main: pick(PREMIOS_INMEDIATOS), extra: Math.random() < PROB_DOBLE ? pick(PREMIOS_COMPRA) : null };
+    return asignados[n];
+  }
 
   // ── Build lid stripes + bulbs once (inside the shared symbols) ──
   var NS = 'http://www.w3.org/2000/svg';
@@ -275,6 +321,13 @@
     var n = card.dataset.n;
     document.getElementById('v-num').textContent = n;
     document.getElementById('v-num2').textContent = n;
+    var p = premioPara(n), extra = document.getElementById('p-extra');
+    document.getElementById('p-main').textContent = p.main;
+    extra.hidden = !p.extra;
+    if (p.extra) {
+      document.getElementById('p-extra-name').textContent = p.extra.premio;
+      document.getElementById('p-extra-cond').textContent = p.extra.condicion;
+    }
 
     lace.setCurrentTime(0);
     if (!reduced) lace.unpauseAnimations();
