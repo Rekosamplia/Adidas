@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>adidas · Elige tu caja</title>
+<style>
+  :root {
+    --bg: #0d0d0e;
+    --card: #17171a;
+    --card-hi: #1f1f23;
+    --line: #2a2a2e;
+    --text: #f4f2ee;
+    --muted: #9a968f;
+    --warm: #ffd98a;
+    --radius: 14px;
+    --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(60rem 30rem at 15% -10%, rgba(255, 200, 120, .10), transparent 60%),
+      radial-gradient(50rem 30rem at 100% 0%, rgba(255, 220, 160, .06), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  header { max-width: 1280px; margin: 0 auto; padding: 56px 24px 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
+  .brand svg { width: 34px; height: auto; }
+  .eyebrow { margin: 48px 0 12px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--warm); }
+  h1 { margin: 48px 0 0; font-size: clamp(34px, 6vw, 72px); line-height: .95; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; max-width: 14ch; }
+  .lead { margin: 20px 0 0; max-width: 46ch; font-size: 18px; line-height: 1.5; color: var(--muted); }
+
+  /* ── Grid ── */
+  main { max-width: 1280px; margin: 0 auto; padding: 16px 24px 80px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; list-style: none; margin: 0; padding: 0; }
+  .card {
+    position: relative; width: 100%; display: flex; flex-direction: column; align-items: stretch;
+    padding: 18px 14px 14px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: linear-gradient(180deg, var(--card-hi), var(--card));
+    color: inherit; font: inherit; cursor: pointer; text-align: left;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: #4a453d; box-shadow: 0 18px 40px -18px rgba(255, 200, 120, .35); outline: none; }
+  .card:focus-visible { box-shadow: 0 0 0 3px var(--warm); }
+  .box { position: relative; width: 100%; aspect-ratio: 300 / 190; }
+  .box svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .box .lid { transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+  .card:hover .lid, .card:focus-visible .lid { transform: translate(-2px, -9px) rotate(-1.5deg); }
+  .num {
+    position: absolute; left: 78.5%; top: 66%; translate: -50% -50%;
+    width: 25%; aspect-ratio: 1; border-radius: 50%;
+    display: grid; place-items: center;
+    background: #fff; color: #000;
+    font-weight: 800; font-size: clamp(16px, 2.2vw, 22px); letter-spacing: -.02em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+  }
+  .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .meta b { color: var(--text); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .card.opened .meta span::after { content: " ✓"; color: var(--warm); }
+
+  /* ── Preloader overlay ── */
+  .loader {
+    position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+    background: rgba(8, 8, 9, .92); backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
+  }
+  .loader.show { opacity: 1; visibility: visible; }
+  .loader svg { width: min(260px, 60vw); height: auto; }
+
+  /* ── Modal / Vale ── */
+  dialog {
+    width: min(720px, calc(100% - 32px)); max-width: none; padding: 0; border: 0; background: transparent; color: #111;
+  }
+  dialog::backdrop { background: rgba(8, 8, 9, .85); backdrop-filter: blur(4px); }
+  dialog[open] .voucher { animation: pop .5s cubic-bezier(.2, 1.3, .4, 1); }
+  @keyframes pop { from { transform: scale(.85) translateY(20px); opacity: 0; } }
+  .voucher { position: relative; display: grid; grid-template-columns: 150px 1fr; border-radius: 16px; overflow: hidden; background: #f4f2ee; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
+  .stub { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 16px; background: #000; color: #fff; }
+  .stub svg { width: 64px; height: auto; }
+  .stub .tag { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #bbb; }
+  .stub .circle { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #000; font-size: 26px; font-weight: 800; }
+  .stub::after { /* perforation */
+    content: ""; position: absolute; top: 12px; bottom: 12px; right: -1px; width: 2px;
+    background: repeating-linear-gradient(#f4f2ee 0 6px, transparent 6px 12px);
+  }
+  .body { position: relative; padding: 36px 36px 32px; background:
+      repeating-linear-gradient(-60deg, transparent 0 28px, rgba(0,0,0,.035) 28px 46px) right / 40% 100% no-repeat, #f4f2ee; }
+  .body .eyebrow { margin: 0 0 14px; color: #6d6a64; }
+  .body h2 { margin: 0; font-size: clamp(26px, 4vw, 40px); line-height: 1.02; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
+  .body p { margin: 18px 0 0; color: #4c4944; font-size: 15px; line-height: 1.5; }
+  .stripes { display: flex; gap: 6px; margin-top: 26px; }
+  .stripes i { display: block; width: 10px; height: 34px; background: #000; transform: skewX(-20deg); }
+  .close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.08); color: #111; font-size: 20px; line-height: 1; cursor: pointer; }
+  .close:hover, .close:focus-visible { background: #000; color: #fff; outline: none; }
+  .notch { position: absolute; left: 150px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); translate: -50% 0; z-index: 1; }
+  .notch.t { top: -12px; } .notch.b { bottom: -12px; }
+
+  footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 40px; color: #5c5953; font-size: 12px; }
+
+  @media (max-width: 560px) {
+    header { padding-top: 32px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card { padding: 14px 10px 10px; }
+    .voucher { grid-template-columns: 1fr; }
+    .stub { flex-direction: row; padding: 18px 20px; }
+    .stub .tag { writing-mode: horizontal-tb; transform: none; }
+    .stub::after { top: auto; bottom: -1px; left: 12px; right: 12px; width: auto; height: 2px; background: repeating-linear-gradient(90deg, #f4f2ee 0 6px, transparent 6px 12px); }
+    .notch { display: none; }
+    .body { padding: 28px 22px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Shared SVG definitions: box drawn once, reused by every card -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffe7a8" stop-opacity=".95"/>
+      <stop offset=".35" stop-color="#ffc861" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ffb347" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="topShade" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#2c2c2f"/><stop offset="1" stop-color="#232326"/>
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 50.1 31.5">
+      <path fill="currentColor" fill-rule="evenodd" d="M50.1 31.4 31.9 0l-9.7 5.6 14.9 25.8h13ZM32.8 31.4l-12-20.7-9.7 5.6 8.7 15.1h13ZM9.7 21.4l5.8 10H2.6L0 27l9.7-5.6Z"/>
+    </symbol>
+    <!-- body + floor shadow + lights -->
+    <symbol id="boxBase" viewBox="0 0 300 190">
+      <ellipse cx="150" cy="168" rx="150" ry="16" fill="#000" opacity=".45"/>
+      <g stroke="#3b3733" stroke-width="1" stroke-linejoin="round">
+        <path d="M20 92 203 115 203 172 20 148z" fill="#1a1a1c"/>
+        <path d="M203 115 266 92 266 149 203 172z" fill="#111113"/>
+      </g>
+      <!-- logo on front face, sheared to follow perspective -->
+      <g transform="matrix(1 .1257 0 1 0 0)" fill="#efece7">
+        <use href="#mark" x="88" y="103" width="48" height="30" style="color:#efece7"/>
+      </g>
+      <!-- string lights -->
+      <path d="M4 132c8 10 4 22 18 24 30 4 60 6 92 12 30 5 60 12 92 6 22-4 40-12 56-24 10-8 22-10 30-20" fill="none" stroke="#2a2b22" stroke-width="1.2"/>
+      <g id="bulbs"></g>
+    </symbol>
+    <symbol id="boxLid" viewBox="0 0 300 190">
+      <g stroke="#3b3733" stroke-width="1" stroke-linejoin="round">
+        <path d="M14 66 208 90 278 64 84 40z" fill="url(#topShade)"/>
+        <path d="M14 66 208 90 208 116 14 92z" fill="#1d1d20"/>
+        <path d="M208 90 278 64 278 90 208 116z" fill="#141416"/>
+      </g>
+      <g id="lidStripes"></g>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="brand"><svg viewBox="0 0 50.1 31.5" aria-hidden="true"><use href="#mark" style="color:#fff"/></svg>adidas</div>
+  <h1>Elige una caja. Descubre tu regalo.</h1>
+  <p class="lead">33 cajas, 33 sorpresas. Escoge tu número y desata el lazo.</p>
+</header>
+
+<main>
+  <ul class="grid" id="grid"></ul>
+</main>
+
+<footer>© adidas · Promoción válida en tiendas adidas participantes.</footer>
+
+<!-- Preloader -->
+<div class="loader" id="loader" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 20 360 230" role="img" aria-label="Cargando">
+<defs>
+<path id="l" d="M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212;M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212;M70 205C105 175 160 130 192 108C155 120 96 116 92 86C88 56 140 60 189 91C197 89 203 89 211 91C260 60 312 56 308 86C304 116 245 120 208 108C240 130 295 175 330 205;M46 186C90 170 150 128 192 108C175 114 148 112 148 100C148 88 168 86 189 91C197 89 203 89 211 91C232 86 252 88 252 100C252 112 225 114 208 108C250 128 310 170 354 186;M72 206C22 150 192 182 193 106C194 103 193 101 193 99C193 97 192 95 196 94C204 92 196 92 204 94C208 95 207 97 207 99C207 101 206 103 207 106C208 182 378 150 328 206;M88 212C44 148 192 176 193 106C194 103 193 101 193 99C193 97 192 95 196 94C204 92 196 92 204 94C208 95 207 97 207 99C207 101 206 103 207 106C208 176 356 148 312 212;M70 205C105 175 160 130 192 108C155 120 96 116 92 86C88 56 140 60 189 91C197 89 203 89 211 91C260 60 312 56 308 86C304 116 245 120 208 108C240 130 295 175 330 205;M92 212C120 175 165 135 192 108C140 122 52 116 48 72C44 30 118 34 189 91C197 89 203 89 211 91C282 34 356 30 352 72C348 116 260 122 208 108C235 135 280 175 308 212"/></path>
+<path id="a" d="M93.2 210.4L77.5 231.1"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M93.2 210.4L77.5 231.1;M93.2 210.4L77.5 231.1;M71.5 203.7L51.8 220.6;M47.9 185.3L23.4 194.2;M70.7 204.5L88 223.9;M86.9 210.4L101.6 231.8;M71.5 203.7L51.8 220.6;M93.2 210.4L77.5 231.1"/></path>
+<path id="b" d="M306.8 210.4L322.5 231.1"><animate attributeName="d" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="M306.8 210.4L322.5 231.1;M306.8 210.4L322.5 231.1;M328.5 203.7L348.2 220.6;M352.1 185.3L376.6 194.2;M329.3 204.5L312 223.9;M313.1 210.4L298.4 231.8;M328.5 203.7L348.2 220.6;M306.8 210.4L322.5 231.1"/></path>
+<g id="w"><rect x="-10" y="-25" width="20" height="50" rx="9"/></g>
+</defs>
+<g fill="none" stroke-linejoin="round">
+<use href="#l" stroke="#2b2622" stroke-width="31"/>
+<use href="#l" stroke="#efdcae" stroke-width="27"/>
+<use href="#l" stroke="#e7e3dd" stroke-width="21"/>
+<use href="#l" stroke="#a8a096" stroke-width="17" stroke-dasharray="1.3 3.7" opacity=".4"/>
+<g stroke-linecap="round">
+<use href="#a" stroke="#2b2622" stroke-width="21"/><use href="#b" stroke="#2b2622" stroke-width="21"/>
+<use href="#a" stroke="#cfcac3" stroke-width="16"/><use href="#b" stroke="#cfcac3" stroke-width="16"/>
+<use href="#a" stroke="#f4f2ee" stroke-width="4" opacity=".8"/><use href="#b" stroke="#f4f2ee" stroke-width="4" opacity=".8"/>
+</g>
+</g>
+<g transform="translate(200 99)">
+<g><animate attributeName="opacity" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="1;1;1;.2;0;0;1;1"/>
+<animateTransform attributeName="transform" type="scale" dur="3.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.1;.3;.44;.56;.7;.86;1" keySplines=".5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1;.5 0 .3 1" values="1;1;.92;.55;.3;.3;.92;1"/>
+<g stroke="#2b2622" stroke-width="2.5">
+<use href="#w" x="-10" fill="#efdcae"/><use href="#w" x="10" fill="#e7e3dd"/>
+</g>
+<g fill="none" stroke="#a8a096" stroke-width="15" stroke-dasharray="1.3 3.7" opacity=".4">
+<path d="M-10-14v28M10-14v28"/>
+</g>
+</g>
+</g>
+</svg>
+</div>
+
+<!-- Voucher modal -->
+<dialog id="voucher" aria-labelledby="v-title">
+  <div class="voucher">
+    <span class="notch t"></span><span class="notch b"></span>
+    <div class="stub">
+      <svg viewBox="0 0 50.1 31.5" aria-hidden="true"><use href="#mark" style="color:#fff"/></svg>
+      <span class="tag">Vale regalo</span>
+      <span class="circle" id="v-num">16</span>
+    </div>
+    <div class="body">
+      <p class="eyebrow">Vale regalo · Caja nº <span id="v-num2">16</span></p>
+      <h2 id="v-title">Acércate a la tienda de Adidas a por tu regalo</h2>
+      <p>Muestra este vale en tu tienda adidas más cercana.</p>
+      <div class="stripes" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+    <form method="dialog"><button class="close" aria-label="Cerrar">×</button></form>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  // ── Config ──
+  var FIRST = 16, COUNT = 33;       // números 16 → 48
+  var LOADER_MS = 1900;             // tiempo para que el lazo se deshaga
+
+  // ── Build lid stripes + bulbs once (inside the shared symbols) ──
+  var NS = 'http://www.w3.org/2000/svg';
+  var L1 = [14, 66], L2 = [208, 90], L4 = [84, 40], H = 26;
+  function P(u, v) { return [L1[0] + u * (L2[0] - L1[0]) + v * (L4[0] - L1[0]), L1[1] + u * (L2[1] - L1[1]) + v * (L4[1] - L1[1])]; }
+  function poly(pts, fill) { var p = document.createElementNS(NS, 'polygon'); p.setAttribute('points', pts.map(function (q) { return q.join(','); }).join(' ')); p.setAttribute('fill', fill); return p; }
+  var stripes = document.getElementById('lidStripes');
+  [0.14, 0.215, 0.29].forEach(function (u0) {
+    var u1 = u0 + 0.045, a = P(u0, 0), b = P(u1, 0);
+    stripes.appendChild(poly([P(u0, 1), P(u1, 1), b, a], '#ebe8e3'));
+    stripes.appendChild(poly([a, b, [b[0], b[1] + H], [a[0], a[1] + H]], '#cfccc6'));
+  });
+  var bulbs = document.getElementById('bulbs');
+  [[6, 134], [22, 156], [62, 160], [102, 166], [146, 174], [190, 177], [232, 164], [262, 146], [290, 128]].forEach(function (c) {
+    var g = document.createElementNS(NS, 'circle'); g.setAttribute('cx', c[0]); g.setAttribute('cy', c[1]); g.setAttribute('r', 11); g.setAttribute('fill', 'url(#glow)');
+    var d = document.createElementNS(NS, 'circle'); d.setAttribute('cx', c[0]); d.setAttribute('cy', c[1]); d.setAttribute('r', 2.4); d.setAttribute('fill', '#fff4cf');
+    bulbs.appendChild(g); bulbs.appendChild(d);
+  });
+
+  // ── Cards ──
+  var grid = document.getElementById('grid'), html = '';
+  for (var n = FIRST; n < FIRST + COUNT; n++) {
+    html += '<li><button class="card" data-n="' + n + '" aria-label="Abrir caja número ' + n + '">' +
+      '<div class="box"><svg viewBox="0 0 300 190" aria-hidden="true"><use href="#boxBase"/><use class="lid" href="#boxLid"/></svg>' +
+      '<span class="num">' + n + '</span></div>' +
+      '<div class="meta"><b>Caja ' + n + '</b><span>Abrir</span></div></button></li>';
+  }
+  grid.innerHTML = html;
+
+  // ── Click → preloader → vale ──
+  var loader = document.getElementById('loader'), lace = loader.querySelector('svg');
+  var dlg = document.getElementById('voucher'), busy = false, lastCard = null;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  lace.pauseAnimations();
+
+  grid.addEventListener('click', function (e) {
+    var card = e.target.closest('.card');
+    if (!card || busy) return;
+    busy = true; lastCard = card;
+    var n = card.dataset.n;
+    document.getElementById('v-num').textContent = n;
+    document.getElementById('v-num2').textContent = n;
+
+    lace.setCurrentTime(0);
+    if (!reduced) lace.unpauseAnimations();
+    loader.classList.add('show');
+
+    setTimeout(function () {
+      loader.classList.remove('show');
+      lace.pauseAnimations();
+      card.classList.add('opened');
+      dlg.showModal();
+      busy = false;
+    }, reduced ? 400 : LOADER_MS);
+  });
+
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); }); // click outside
+  dlg.addEventListener('close', function () { if (lastCard) lastCard.focus(); });
+})();
+</script>
+</body>
+</html>
