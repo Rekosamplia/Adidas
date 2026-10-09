@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preloader cordón</title>
+<style>
+  /* ── Preloader: copia este bloque a tu CSS ── */
+  .preloader {
+    position: fixed; inset: 0; z-index: 9999;
+    display: grid; place-items: center;
+    background: #fff;
+    transition: opacity .5s ease, visibility .5s;
+  }
+  .preloader img { width: min(240px, 55vw); height: auto; }
+  .preloader.is-done { opacity: 0; visibility: hidden; }
+</style>
+</head>
+<body>
+
+<!-- ── Preloader: pon esto justo después de <body> ── -->
+<div class="preloader" id="preloader" role="status" aria-label="Cargando">
+  <img src="cordon-preloader.svg" alt="" width="240" height="153" fetchpriority="high">
+</div>
+<script>
+  // Oculta el preloader al cargar la página (mínimo 1 ciclo visible = 3.2s, opcional)
+  (function () {
+    var el = document.getElementById('preloader'), MIN = 0, t0 = performance.now();
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        el.classList.add('is-done');
+        setTimeout(function () { el.remove(); }, 600); // tras el fade de .5s
+      }, Math.max(0, MIN - (performance.now() - t0)));
+    });
+  })();
+</script>
+
+<main style="font:16px system-ui;padding:40px">Contenido de la página…</main>
+</body>
+</html>
