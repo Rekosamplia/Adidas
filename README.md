@@ -17,6 +17,7 @@ assets/
   qr-app.svg               QR de la app (versión optimizada del original de MATERIAL)
   favicon.svg
   legal.css                Estilos de las páginas legales
+  premios/                 Fotos de los premios (WebP 320×320, ~47 KB en total)
 tools/
   generar-preloader.js     Genera cordon-preloader.svg a partir de las poses del cordón
 ```

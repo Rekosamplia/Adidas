@@ -96,7 +96,11 @@
   .body .eyebrow { margin: 0 0 14px; color: #6d6a64; letter-spacing: .12em; }
   .body h2 { margin: 0; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.02; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; padding-right: 28px; }
   .prizes { display: grid; gap: 10px; margin-top: 22px; }
-  .prize { display: grid; gap: 4px; padding: 14px 16px; border-radius: 10px; background: #fff; border: 1px solid #e2ded6; }
+  .prize { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px; padding: 10px 16px 10px 10px; border-radius: 12px; background: #fff; border: 1px solid #e2ded6; }
+  .prize-txt { display: grid; gap: 4px; }
+  .prize-img { width: 88px; height: 88px; border-radius: 8px; object-fit: cover; background: #fff; display: block; }
+  .prize.extra .prize-img { outline: 1px solid #333; }
+  @media (max-width: 560px) { .prize-img { width: 72px; height: 72px; } .prize { gap: 12px; } }
   .prize .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #6d6a64; }
   .prize strong { font-size: 20px; font-weight: 800; line-height: 1.15; }
   .prize small { font-size: 14px; color: #4c4944; }
@@ -244,13 +248,19 @@
       <h2 id="v-title">Acércate a la tienda de Adidas a por tu regalo</h2>
       <div class="prizes">
         <div class="prize">
-          <span class="label">Tu regalo</span>
-          <strong id="p-main"></strong>
+          <img class="prize-img" id="p-main-img" alt="" width="88" height="88">
+          <div class="prize-txt">
+            <span class="label">Tu regalo</span>
+            <strong id="p-main"></strong>
+          </div>
         </div>
         <div class="prize extra" id="p-extra" hidden>
-          <span class="label">¡Doble premio! · Con tu compra</span>
-          <strong id="p-extra-name"></strong>
-          <small id="p-extra-cond"></small>
+          <img class="prize-img" id="p-extra-img" alt="" width="88" height="88">
+          <div class="prize-txt">
+            <span class="label">¡Doble premio! · Con tu compra</span>
+            <strong id="p-extra-name"></strong>
+            <small id="p-extra-cond"></small>
+          </div>
         </div>
       </div>
       <p class="redeem">
@@ -269,19 +279,25 @@
   var LOADER_MS = 1900;             // tiempo para que el lazo se deshaga
 
   // ── Premios ──
+  var IMG = 'assets/premios/';
   var PREMIOS_INMEDIATOS = [
-    'Stickers de la marca',
-    'Lanyard de la marca',
-    'Bruma de la marca',
-    'Gel de la marca'
+    { premio: 'Stickers de la marca', img: IMG + 'stickers.webp' },
+    { premio: 'Lanyard de la marca',  img: IMG + 'lanyard.webp' },
+    { premio: 'Bruma de la marca',    img: IMG + 'bruma.webp' },
+    { premio: 'Gel de la marca',      img: IMG + 'gel.webp' }
   ];
   var PREMIOS_COMPRA = [            // doble premio, condicionado a compra mínima
-    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 110 € en outlets' },
-    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 150 € en franquicias' },
-    { premio: 'Fragancia',       condicion: 'Por compras superiores a 70 € en outlets' },
-    { premio: 'Balón de fútbol', condicion: 'Por compras superiores a 120 € en franquicias' }
+    { premio: 'Balón de fútbol', img: IMG + 'balon.webp',     condicion: 'Por compras superiores a 110 € en outlets' },
+    { premio: 'Balón de fútbol', img: IMG + 'balon.webp',     condicion: 'Por compras superiores a 150 € en franquicias' },
+    { premio: 'Fragancia',       img: IMG + 'fragancia.webp', condicion: 'Por compras superiores a 70 € en outlets' },
+    { premio: 'Balón de fútbol', img: IMG + 'balon.webp',     condicion: 'Por compras superiores a 120 € en franquicias' }
   ];
   var PROB_DOBLE = 0.3;             // probabilidad de que una caja incluya doble premio
+  // Precarga las fotos de premios (~47 KB) para que el vale aparezca completo
+  window.addEventListener('load', function () {
+    PREMIOS_INMEDIATOS.concat(PREMIOS_COMPRA).forEach(function (p) { new Image().src = p.img; });
+  });
+
   // Cada clic sortea de nuevo, sin repetir el regalo mostrado justo antes
   var ultimo = { main: null, extra: null };
   function pickDistinto(list, prev) {
@@ -338,9 +354,11 @@
     document.getElementById('v-num').textContent = n;
     document.getElementById('v-num2').textContent = n;
     var p = premioPara(n), extra = document.getElementById('p-extra');
-    document.getElementById('p-main').textContent = p.main;
+    document.getElementById('p-main').textContent = p.main.premio;
+    document.getElementById('p-main-img').src = p.main.img;
     extra.hidden = !p.extra;
     if (p.extra) {
+      document.getElementById('p-extra-img').src = p.extra.img;
       document.getElementById('p-extra-name').textContent = p.extra.premio;
       document.getElementById('p-extra-cond').textContent = p.extra.condicion;
     }
