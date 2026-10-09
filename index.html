@@ -33,7 +33,7 @@
   /* ── Hero ── */
   header { max-width: 1280px; margin: 0 auto; padding: 56px 24px 32px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
-  .brand svg { width: 34px; height: auto; }
+  .brand svg { width: 48px; height: auto; display: block; }
   .eyebrow { margin: 48px 0 12px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--warm); }
   h1 { margin: 48px 0 0; font-size: clamp(34px, 6vw, 72px); line-height: .95; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; max-width: 14ch; }
   .lead { margin: 20px 0 0; max-width: 46ch; font-size: 18px; line-height: 1.5; color: var(--muted); }
@@ -112,7 +112,10 @@
   .notch { position: absolute; left: 150px; width: 24px; height: 24px; border-radius: 50%; background: var(--bg); translate: -50% 0; z-index: 1; }
   .notch.t { top: -12px; } .notch.b { bottom: -12px; }
 
-  footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 40px; color: #5c5953; font-size: 12px; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 24px 24px 40px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; color: #6b675f; font-size: 12px; }
+  footer nav { display: flex; gap: 20px; }
+  footer a { color: #9a968f; text-decoration: none; }
+  footer a:hover, footer a:focus-visible { color: var(--text); text-decoration: underline; }
 
   @media (max-width: 560px) {
     header { padding-top: 32px; }
@@ -176,7 +179,7 @@
 </svg>
 
 <header>
-  <div class="brand"><svg viewBox="0 0 50.1 31.5" aria-hidden="true"><use href="#mark" style="color:#fff"/></svg>adidas</div>
+  <div class="brand"><svg viewBox="0 0 50.1 31.5" role="img" aria-label="adidas"><use href="#mark" style="color:#fff"/></svg></div>
   <h1>Elige una caja. Descubre tu regalo.</h1>
   <p class="lead">33 cajas, 33 sorpresas. Escoge tu número y desata el lazo.</p>
 </header>
@@ -185,7 +188,13 @@
   <ul class="grid" id="grid"></ul>
 </main>
 
-<footer>© adidas · Promoción válida en tiendas adidas participantes.</footer>
+<footer>
+  <span>Promoción válida en tiendas participantes.</span>
+  <nav aria-label="Legal">
+    <a href="aviso-legal.html">Aviso legal</a>
+    <a href="politica-privacidad.html">Política de privacidad</a>
+  </nav>
+</footer>
 
 <!-- Preloader -->
 <div class="loader" id="loader" aria-hidden="true">

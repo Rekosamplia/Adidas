@@ -8,12 +8,15 @@ Web estática, sin dependencias ni proceso de build: basta con abrir `index.html
 
 ```
 index.html                 Landing completa (HTML + CSS + JS + SVG inline)
+aviso-legal.html           Aviso legal (BORRADOR: completar campos [pendientes])
+politica-privacidad.html   Política de privacidad (BORRADOR: completar campos [pendientes])
 assets/
   cordon-preloader.svg     Preloader animado (SVG + SMIL, ~4 KB)
   logo-adidas-negro.svg    Logotipo (barras) en negro
   logo-adidas-blanco.svg   Logotipo (barras) en blanco
   qr-app.svg               QR de la app (versión optimizada del original de MATERIAL)
   favicon.svg
+  legal.css                Estilos de las páginas legales
 tools/
   generar-preloader.js     Genera cordon-preloader.svg a partir de las poses del cordón
 ```
@@ -50,3 +53,11 @@ node tools/generar-preloader.js assets/cordon-preloader.svg
 ```
 
 y sustituye el bloque `<svg …aria-label="Cargando">…</svg>` dentro de `<div class="loader">` en `index.html` por el contenido del nuevo archivo.
+
+## Páginas legales
+
+`aviso-legal.html` y `politica-privacidad.html` son **borradores** con la estructura habitual (LSSI-CE y RGPD). Antes de publicar:
+
+1. Completar los campos resaltados en amarillo (`<em class="todo">…</em>`): titular, NIF, domicilio, contacto, fechas de la promoción, enlaces a las bases y a la política de la app.
+2. Que el equipo legal valide el texto.
+3. Eliminar el párrafo `<p class="note">Borrador…</p>` de ambas páginas.
