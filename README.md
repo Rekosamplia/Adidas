@@ -1,4 +1,4 @@
-# adidas · Elige tu caja
+# adidas · Tira del cordón
 
 Landing de campaña con 33 cajas (números 16 → 48). Al hacer clic en una caja se muestra el preloader del cordón deshaciéndose y, a continuación, un vale regalo: *"Acércate a la tienda de Adidas a por tu regalo"* con un premio inmediato aleatorio y, en algunas cajas, un doble premio vinculado a compra. El vale indica que el regalo se recoge en tienda mostrando el QR de la app.
 
@@ -14,6 +14,8 @@ assets/
   cordon-preloader.svg     Preloader animado (SVG + SMIL, ~4 KB)
   logo-adidas-negro.svg    Logotipo (barras) en negro
   logo-adidas-blanco.svg   Logotipo (barras) en blanco
+  cordon-header.webp       Cordón del titular (WebP con transparencia, ~37 KB)
+  cordon-caja.webp         Lazo sobre la tapa de cada caja (240 px, ~13 KB)
   qr-app.svg               QR de la app (versión optimizada del original de MATERIAL)
   favicon.svg
   legal.css                Estilos de las páginas legales

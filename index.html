@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>adidas · Elige tu caja</title>
+<title>adidas · Tira del cordón</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <style>
   :root {
@@ -35,8 +35,12 @@
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
   .brand svg { width: 48px; height: auto; display: block; }
   .eyebrow { margin: 48px 0 12px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--warm); }
-  h1 { margin: 48px 0 0; font-size: clamp(34px, 6vw, 72px); line-height: .95; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; max-width: 14ch; }
-  .lead { margin: 20px 0 0; max-width: 46ch; font-size: 18px; line-height: 1.5; color: var(--muted); }
+  .hero-title { display: flex; align-items: center; gap: clamp(16px, 3vw, 40px); margin-top: 40px; }
+  .hero-lace { flex: none; width: clamp(88px, 26vw, 320px); height: auto; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .5)); }
+  h1 { margin: 0; min-width: 0; font-size: clamp(24px, 6vw, 72px); line-height: .95; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; }
+  .lead { margin: 20px 0 0; font-size: clamp(15px, 1.6vw, 18px); line-height: 1.5; color: var(--muted); }
+  .lead strong { color: #fff; font-weight: 700; }
+  @media (min-width: 640px) { .lead { white-space: nowrap; } }
 
   /* ── Grid ── */
   main { max-width: 1280px; margin: 0 auto; padding: 16px 24px 80px; }
@@ -54,6 +58,18 @@
   .box svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .box .lid { transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
   .card:hover .lid, .card:focus-visible .lid { transform: translate(-2px, -9px) rotate(-1.5deg); }
+  /* Lazo sobre la tapa: capa del mismo tamaño que el SVG para moverse igual que la tapa */
+  .tie { position: absolute; inset: 0; transform-origin: 0 0; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); pointer-events: none; }
+  .card:hover .tie, .card:focus-visible .tie { transform: translate(-.67%, -4.74%) rotate(-1.5deg); }
+  .tie img { position: absolute; left: 50.7%; top: 36%; width: 34%; height: auto; translate: -50% -50%; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .55)); transition: transform .3s ease, opacity .3s ease; }
+  .card:hover .tie img, .card:focus-visible .tie img { transform: rotate(-5deg) scale(1.05); }
+  .card.pulling .tie img { animation: tug .42s ease-in forwards; }
+  .card.opened .tie img { opacity: 0; }
+  @keyframes tug {
+    0%   { transform: scale(1.05) rotate(-5deg); }
+    35%  { transform: scale(1.2, .85) translateY(6%); }
+    100% { transform: scale(.35) translateY(-60%) rotate(14deg); opacity: 0; }
+  }
   .num {
     position: absolute; left: 78.5%; top: 66%; translate: -50% -50%;
     width: 25%; aspect-ratio: 1; border-radius: 50%;
@@ -123,6 +139,11 @@
 
   @media (max-width: 560px) {
     header { padding-top: 32px; }
+    /* Hero a ancho completo: cordón + titular llenan la pantalla menos el margen lateral */
+    header, main, footer { padding-left: 20px; padding-right: 20px; }
+    .hero-title { gap: 3vw; margin-top: 32px; }
+    .hero-lace { width: 44vw; }
+    h1 { font-size: calc((53vw - 40px) / 4.39); line-height: .92; }
     .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .card { padding: 14px 10px 10px; }
     .voucher { grid-template-columns: minmax(0, 1fr); }
@@ -184,8 +205,11 @@
 
 <header>
   <div class="brand"><svg viewBox="0 0 50.1 31.5" role="img" aria-label="adidas"><use href="#mark" style="color:#fff"/></svg></div>
-  <h1>Elige una caja. Descubre tu regalo.</h1>
-  <p class="lead">33 cajas, 33 sorpresas. Escoge tu número y desata el lazo.</p>
+  <div class="hero-title">
+    <img class="hero-lace" src="assets/cordon-header.webp" alt="" width="560" height="352" fetchpriority="high">
+    <h1>Tira<br>del<br>cordón</h1>
+  </div>
+  <p class="lead">33 cajas, 33 sorpresas. Escoge tu número y desata el lazo.<br><strong>Regalo seguro</strong></p>
 </header>
 
 <main>
@@ -335,6 +359,7 @@
   for (var n = FIRST; n < FIRST + COUNT; n++) {
     html += '<li><button class="card" data-n="' + n + '" aria-label="Abrir caja número ' + n + '">' +
       '<div class="box"><svg viewBox="0 0 300 190" aria-hidden="true"><use href="#boxBase"/><use class="lid" href="#boxLid"/></svg>' +
+      '<span class="tie"><img src="assets/cordon-caja.webp" alt="" width="240" height="151" decoding="async"></span>' +
       '<span class="num">' + n + '</span></div>' +
       '<div class="meta"><b>Caja ' + n + '</b><span>Abrir</span></div></button></li>';
   }
@@ -363,17 +388,24 @@
       document.getElementById('p-extra-cond').textContent = p.extra.condicion;
     }
 
-    lace.setCurrentTime(0);
-    if (!reduced) lace.unpauseAnimations();
-    loader.classList.add('show');
+    // 1) se tira del lazo de la caja  2) preloader del cordón deshaciéndose  3) vale
+    var tug = card.classList.contains('opened') || reduced ? 0 : 380;
+    if (tug) card.classList.add('pulling');
 
     setTimeout(function () {
-      loader.classList.remove('show');
-      lace.pauseAnimations();
-      card.classList.add('opened');
-      dlg.showModal();
-      busy = false;
-    }, reduced ? 400 : LOADER_MS);
+      lace.setCurrentTime(0);
+      if (!reduced) lace.unpauseAnimations();
+      loader.classList.add('show');
+
+      setTimeout(function () {
+        loader.classList.remove('show');
+        lace.pauseAnimations();
+        card.classList.remove('pulling');
+        card.classList.add('opened');
+        dlg.showModal();
+        busy = false;
+      }, reduced ? 400 : LOADER_MS);
+    }, tug);
   });
 
   dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); }); // click outside
